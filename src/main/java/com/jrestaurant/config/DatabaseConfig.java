@@ -25,7 +25,7 @@ public class DatabaseConfig {
 
     public DatabaseConfig() {
         initializeEntityManagerFactory();
-        this.entityManager = createEntityManager();
+        // this.entityManager = createEntityManager();
         System.out.println("DB connected with JPA");
     }
 

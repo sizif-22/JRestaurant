@@ -1,6 +1,6 @@
 package com.jrestaurant;
 
-import com.jrestaurant.config.DatabaseConfig;
+// import com.jrestaurant.config.DatabaseConfig;
 
 public class Main {
 
