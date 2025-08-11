@@ -1,10 +1,11 @@
 package com.jrestaurant.classes;
 
-enum Role {
-     CASHIER, MANAGER, DELIVERY, CHEF
-};
+
 
 public class Employee {
+    public enum Role {
+     CASHIER, MANAGER, DELIVERY, CHEF
+};
      private int id;
      private String name;
      private String phone;
