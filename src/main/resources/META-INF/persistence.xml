@@ -8,9 +8,13 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         
         <!-- List your entity classes here -->
-        <class>com.jrestaurant.functions.Cashier</class>
+        <class>com.jrestaurant.classes.Employee</class>
+        <class>com.jrestaurant.classes.Delivery</class>
+        <class>com.jrestaurant.classes.DineIn</class>
+        <class>com.jrestaurant.classes.FoodItem</class>
+        <class>com.jrestaurant.classes.Order</class>
+        <class>com.jrestaurant.classes.Reservation</class>
 
-        
         <properties>
             <!-- Database connection settings -->
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
