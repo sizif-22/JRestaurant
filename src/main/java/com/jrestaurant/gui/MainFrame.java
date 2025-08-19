@@ -11,14 +11,15 @@ import com.jrestaurant.gui.manager.SecondManagerPanel;
 
 public class MainFrame extends JFrame {
      private JPanel currentPanel;
-     private int width = (int) (1920 * 0.7);
-     private int height = (int) (1080 * 0.7);
+     private static int width = (int) (1920 * 0.7);
+     private static int height = (int) (1080 * 0.7);
+     private Employee emp;
 
      public MainFrame() {
 
-          // ImageIcon img = new
-          // ImageIcon(MainFrame.class.getResource("../assets/swuber.jpg"));
-          // setIconImage(img.getImage());
+          ImageIcon img = new
+          ImageIcon(MainFrame.class.getResource("../assets/Jresaurant-2.jpg"));
+          setIconImage(img.getImage());
           DatabaseConfig dbconfig = new DatabaseConfig();
           Employee.setODBManager(dbconfig);
           setTitle("JRestaurant");
@@ -28,11 +29,11 @@ public class MainFrame extends JFrame {
           setResizable(false);
           setLocationRelativeTo(null);
           currentPanel = new JPanel(new BorderLayout());
-
           setLayout(new BorderLayout());
           add(currentPanel, BorderLayout.CENTER);
           setVisible(true);
           setPanel(new LoginPanel(this));
+          this.emp = null;
      }
 
      public void setPanel(JPanel panel) {
@@ -41,22 +42,27 @@ public class MainFrame extends JFrame {
           SwingUtilities.updateComponentTreeUI(currentPanel);
      }
 
-     @Override
-     public int getWidth() {
-          return this.width;
+     public void setEmp(Employee emp) {
+          this.emp = emp;
+     }
+     public Employee getEmp(){
+          return this.emp;
+     }
+     public static int getFrameWidth() {
+          return width;
      }
 
-     @Override
-     public int getHeight() {
-          return (this.height - 38);
+
+     public static int getFrameHeight() {
+          return (height - 38);
      }
 
-     public int getWidthRatio(int ratio) {
-          return (int) (this.width * ratio / 100);
+     public static int getWidthRatio(int ratio) {
+          return (int) (MainFrame.width * ratio / 100);
      }
 
-     public int getHeightRatio(int ratio) {
-          return (int) ((this.height - 38) * ratio / 100);
+     public static int getHeightRatio(int ratio) {
+          return (int) ((MainFrame.height - 38) * ratio / 100);
      }
 
      public void goToManagerMainPanel() {

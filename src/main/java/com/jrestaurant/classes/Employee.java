@@ -2,6 +2,8 @@ package com.jrestaurant.classes;
 
 import java.util.*;
 
+import org.hibernate.grammars.hql.HqlParser.EntityIdExpressionContext;
+
 import com.jrestaurant.config.DatabaseConfig;
 
 import jakarta.persistence.*;
@@ -106,6 +108,14 @@ public class Employee {
                return null;
           }
           return employees.get(0);
+     }
+
+     public static List<Employee> getEmployees() {
+          EntityManager em = odbManager.getEntityManager();
+          TypedQuery<Employee> query = em.createQuery("Select e from Employee e", Employee.class);
+          List<Employee> employees = query.getResultList();
+          em.close();
+          return employees;
      }
 
      public boolean register(Employee emp) {

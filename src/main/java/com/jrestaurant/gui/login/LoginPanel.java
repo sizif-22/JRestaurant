@@ -15,35 +15,35 @@ public class LoginPanel extends JPanel {
 
      public LoginPanel(MainFrame frame) {
           this.frame = frame;
-          setBounds(0, 0, frame.getWidth(), frame.getHeight());
+          setBounds(0, 0, MainFrame.getFrameWidth(), MainFrame.getFrameHeight());
           setBackground(new Color(21, 21, 21));
           setLayout(null);
 
           JLabel adminLabel = new JLabel("Log In Page.");
           adminLabel.setFont(new Font("Arial", Font.BOLD, 24));
           adminLabel.setForeground(Color.WHITE);
-          adminLabel.setBounds(frame.getWidthRatio(10), frame.getHeightRatio(10), 200, 50);
+          adminLabel.setBounds(MainFrame.getWidthRatio(10), MainFrame.getHeightRatio(10), 200, 50);
           add(adminLabel);
 
           JLabel userNameLabel = new JLabel("UserName:");
           userNameLabel.setFont(new Font("Arial", Font.BOLD, 18));
           userNameLabel.setForeground(Color.WHITE);
-          userNameLabel.setBounds(frame.getWidthRatio(30), frame.getHeightRatio(40), 100, 30);
+          userNameLabel.setBounds(MainFrame.getWidthRatio(30), MainFrame.getHeightRatio(40), 100, 30);
           add(userNameLabel);
 
           userNameField = new JTextField();
-          userNameField.setBounds(frame.getWidthRatio(40), frame.getHeightRatio(40), 400, 30);
+          userNameField.setBounds(MainFrame.getWidthRatio(40), MainFrame.getHeightRatio(40), 400, 30);
           userNameField.setFont(new Font("Arial", Font.BOLD, 18));
           add(userNameField);
 
           JLabel passwordLabel = new JLabel("Password:");
           passwordLabel.setFont(new Font("Arial", Font.BOLD, 18));
           passwordLabel.setForeground(Color.WHITE);
-          passwordLabel.setBounds(frame.getWidthRatio(30), frame.getHeightRatio(50), 100, 30);
+          passwordLabel.setBounds(MainFrame.getWidthRatio(30), MainFrame.getHeightRatio(50), 100, 30);
           add(passwordLabel);
 
           passwordField = new JPasswordField();
-          passwordField.setBounds(frame.getWidthRatio(40), frame.getHeightRatio(50), 400, 30);
+          passwordField.setBounds(MainFrame.getWidthRatio(40), MainFrame.getHeightRatio(50), 400, 30);
           passwordField.setFont(new Font("Arial", Font.BOLD, 18));
           add(passwordField);
 
@@ -52,7 +52,7 @@ public class LoginPanel extends JPanel {
           loginFormButton.setForeground(Color.black);
           loginFormButton.setFont(new Font("Arial", Font.BOLD, 18));
           loginFormButton.setFocusPainted(false);
-          loginFormButton.setBounds(frame.getWidthRatio(50) - 100, frame.getHeightRatio(65), 200, 40);
+          loginFormButton.setBounds(MainFrame.getWidthRatio(50) - 100, MainFrame.getHeightRatio(65), 200, 40);
           add(loginFormButton);
           loginFormButton.addActionListener(e -> {
                String userName = userNameField.getText();
@@ -71,6 +71,7 @@ public class LoginPanel extends JPanel {
                }
 
                if ((emp.getRole()).toString() == (Role.MANAGER).toString()) {
+                    frame.setEmp(emp);
                     frame.goToManagerMainPanel();
                     return;
                } else {
