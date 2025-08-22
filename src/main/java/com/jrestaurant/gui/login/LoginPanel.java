@@ -9,12 +9,10 @@ import com.jrestaurant.classes.Role;
 import com.jrestaurant.gui.MainFrame;
 
 public class LoginPanel extends JPanel {
-     private MainFrame frame;
      private JTextField userNameField;
      private JPasswordField passwordField;
 
      public LoginPanel(MainFrame frame) {
-          this.frame = frame;
           setBounds(0, 0, MainFrame.getFrameWidth(), MainFrame.getFrameHeight());
           setBackground(new Color(21, 21, 21));
           setLayout(null);
@@ -73,6 +71,11 @@ public class LoginPanel extends JPanel {
                if ((emp.getRole()).toString() == (Role.MANAGER).toString()) {
                     frame.setEmp(emp);
                     frame.goToManagerMainPanel();
+                    return;
+               }
+               if ((emp.getRole()).toString() == (Role.CASHIER).toString()) {
+                    frame.setEmp(emp);
+                    frame.goToCashierPanel();
                     return;
                } else {
                     JOptionPane.showMessageDialog(this, "Something went wrong please try again later.",

@@ -2,19 +2,14 @@ package com.jrestaurant.gui.manager;
 
 import javax.swing.*;
 
-import com.jrestaurant.classes.Employee;
 import com.jrestaurant.gui.MainFrame;
 
 import java.awt.*;
 
 public class SecondManagerPanel extends JPanel {
 
-     private MainFrame frame;
-     private Employee emp;
-
      public SecondManagerPanel(MainFrame frame) {
-          this.frame = frame;
-          this.emp = frame.getEmp();
+          frame.getEmp();
           setLayout(null);
           setBackground(new Color(21, 21, 21));
           setBounds(0, 0, MainFrame.getFrameWidth(), MainFrame.getFrameHeight());

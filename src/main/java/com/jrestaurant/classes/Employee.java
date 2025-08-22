@@ -1,9 +1,6 @@
 package com.jrestaurant.classes;
 
 import java.util.*;
-
-import org.hibernate.grammars.hql.HqlParser.EntityIdExpressionContext;
-
 import com.jrestaurant.config.DatabaseConfig;
 
 import jakarta.persistence.*;
@@ -29,6 +26,19 @@ public class Employee {
      private String password;
 
      private static DatabaseConfig odbManager;
+
+     public Employee() {
+     }
+
+     public Employee(String name, String phone, Role role, double salary, String username, String password) {
+          this();
+          this.name = name;
+          this.phone = phone;
+          this.role = role;
+          this.salary = salary;
+          this.username = username;
+          this.password = password;
+     }
 
      // Getters
      public int getId() {
@@ -102,7 +112,6 @@ public class Employee {
           query.setParameter("p", enteredPassword);
           query.setMaxResults(1);
           List<Employee> employees = query.getResultList();
-
           em.close();
           if (employees.isEmpty()) {
                return null;
@@ -122,4 +131,31 @@ public class Employee {
           return false;
      }
 
+     public static boolean fireEmployee(Employee emp) {
+          try {
+               EntityManager em = odbManager.getEntityManager();
+               em.getTransaction().begin();
+               Employee merged = em.merge(emp);
+               em.remove(merged);
+               em.getTransaction().commit();
+               em.close();
+               return true;
+          } catch (Exception e) {
+               System.out.println(e.getMessage());
+               return false;
+          }
+     }
+
+     public static boolean hireEmployee(Employee emp) {
+          try {
+               EntityManager em = odbManager.getEntityManager();
+               em.getTransaction().begin();
+               em.merge(emp);
+               em.getTransaction().commit();
+               em.close();
+               return true;
+          } catch (Exception e) {
+               return false;
+          }
+     }
 }

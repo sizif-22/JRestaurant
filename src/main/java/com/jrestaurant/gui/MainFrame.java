@@ -5,9 +5,9 @@ import javax.swing.*;
 
 import com.jrestaurant.classes.Employee;
 import com.jrestaurant.config.DatabaseConfig;
+import com.jrestaurant.gui.cashier.Home;
 import com.jrestaurant.gui.login.LoginPanel;
 import com.jrestaurant.gui.manager.MainManagerPanel;
-import com.jrestaurant.gui.manager.SecondManagerPanel;
 
 public class MainFrame extends JFrame {
      private JPanel currentPanel;
@@ -69,12 +69,17 @@ public class MainFrame extends JFrame {
           setPanel(new MainManagerPanel(this));
      }
 
+     public void goToCashierPanel(){
+          setPanel(new Home(this));
+     }
+
      public void goToSecondManagerPanel() {
-          setPanel(new SecondManagerPanel(this));
+          setPanel(new Home(this));
      }
 
      public void logOut() {
           setPanel(new LoginPanel(this));
      }
+
 
 }
