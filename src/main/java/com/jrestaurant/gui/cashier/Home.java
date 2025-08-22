@@ -77,6 +77,10 @@ public class Home extends JPanel {
           logoutButton.addActionListener(e -> {
                frame.logOut();
           });
+
+     }
+     void makeOrder(MainFrame frame){
+          
      }
 
 }

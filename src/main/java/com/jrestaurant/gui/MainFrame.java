@@ -5,7 +5,7 @@ import javax.swing.*;
 
 import com.jrestaurant.classes.Employee;
 import com.jrestaurant.config.DatabaseConfig;
-import com.jrestaurant.gui.cashier.Home;
+import com.jrestaurant.gui.cashier.*;
 import com.jrestaurant.gui.login.LoginPanel;
 import com.jrestaurant.gui.manager.MainManagerPanel;
 
@@ -17,8 +17,7 @@ public class MainFrame extends JFrame {
 
      public MainFrame() {
 
-          ImageIcon img = new
-          ImageIcon(MainFrame.class.getResource("../assets/Jresaurant-2.jpg"));
+          ImageIcon img = new ImageIcon(MainFrame.class.getResource("../assets/Jresaurant-2.jpg"));
           setIconImage(img.getImage());
           DatabaseConfig dbconfig = new DatabaseConfig();
           Employee.setODBManager(dbconfig);
@@ -45,13 +44,14 @@ public class MainFrame extends JFrame {
      public void setEmp(Employee emp) {
           this.emp = emp;
      }
-     public Employee getEmp(){
+
+     public Employee getEmp() {
           return this.emp;
      }
+
      public static int getFrameWidth() {
           return width;
      }
-
 
      public static int getFrameHeight() {
           return (height - 38);
@@ -69,7 +69,7 @@ public class MainFrame extends JFrame {
           setPanel(new MainManagerPanel(this));
      }
 
-     public void goToCashierPanel(){
+     public void goToCashierPanel() {
           setPanel(new Home(this));
      }
 
@@ -77,9 +77,16 @@ public class MainFrame extends JFrame {
           setPanel(new Home(this));
      }
 
+     public void goToMakeOrderPanel() {
+          setPanel(new MakeOrderPage(this));
+     }
+
+     public void goToMakeReservationPanel() {
+          setPanel(new MakeReservationPage(this));
+     }
+
      public void logOut() {
           setPanel(new LoginPanel(this));
      }
-
 
 }
