@@ -2,6 +2,7 @@ package com.jrestaurant.gui.manager;
 
 import javax.swing.*;
 
+import com.jrestaurant.classes.Role;
 import com.jrestaurant.gui.MainFrame;
 
 import java.awt.*;
@@ -26,12 +27,31 @@ public class SecondManagerPanel extends JPanel {
           leftPanel.setLayout(null);
           add(leftPanel);
 
-          JButton empButton = new JButton("Employees");
-          empButton.setFont(new Font("Arial", Font.BOLD, 18));
-          empButton.setBackground(Color.white);
-          empButton.setForeground(Color.BLACK);
-          empButton.setBounds(30, MainFrame.getHeightRatio(50) - 55, MainFrame.getWidthRatio(20) - 60, 45);
-          leftPanel.add(empButton);
+          if (frame.getEmp().getRole() == Role.MANAGER) {
+               JButton empButton = new JButton("Employees");
+               empButton.setFont(new Font("Arial", Font.BOLD, 18));
+               empButton.setBackground(Color.white);
+               empButton.setForeground(Color.BLACK);
+               empButton.setBounds(30, MainFrame.getHeightRatio(50) - 55, MainFrame.getWidthRatio(20) - 60, 45);
+               empButton.addActionListener(e -> frame.goToManagerMainPanel());
+               leftPanel.add(empButton);
+          } else if (frame.getEmp().getRole() == Role.CASHIER) {
+               JButton makeOrderButton = new JButton("Make Order");
+               makeOrderButton.setFont(new Font("Arial", Font.BOLD, 18));
+               makeOrderButton.setBackground(Color.white);
+               makeOrderButton.setForeground(Color.BLACK);
+               makeOrderButton.setBounds(30, MainFrame.getHeightRatio(50) - 110, MainFrame.getWidthRatio(20) - 60, 45);
+               makeOrderButton.addActionListener(e -> frame.goToMakeOrderPanel());
+               leftPanel.add(makeOrderButton);
+
+               JButton reservationButton = new JButton("Reservation");
+               reservationButton.setFont(new Font("Arial", Font.BOLD, 18));
+               reservationButton.setBackground(Color.white);
+               reservationButton.setForeground(Color.BLACK);
+               reservationButton.setBounds(30, MainFrame.getHeightRatio(50) - 35, MainFrame.getWidthRatio(20) - 60, 45);
+               reservationButton.addActionListener(e -> frame.goToMakeReservationPanel());
+               leftPanel.add(reservationButton);
+          }
 
           JButton orderButton = new JButton("Orders");
           orderButton.setFont(new Font("Arial", Font.BOLD, 18));
@@ -45,15 +65,7 @@ public class SecondManagerPanel extends JPanel {
           logoutButton.setBackground(Color.white);
           logoutButton.setForeground(Color.BLACK);
           logoutButton.setBounds(30, MainFrame.getFrameHeight() - 55, MainFrame.getWidthRatio(20) - 60, 45);
+          logoutButton.addActionListener(e -> frame.logOut());
           leftPanel.add(logoutButton);
-
-          logoutButton.addActionListener(e -> {
-               frame.logOut();
-          });
-
-          empButton.addActionListener(e -> {
-               frame.goToManagerMainPanel();
-          });
      }
-
 }

@@ -8,6 +8,9 @@ import com.jrestaurant.gui.MainFrame;
 public class SelectTypeOrderPage extends JPanel {
 
     public SelectTypeOrderPage(MainFrame frame) {
+
+        setBounds(0, 0, MainFrame.getFrameWidth(), MainFrame.getFrameHeight());
+        setBackground(new Color(21, 21, 21));
         setLayout(null);
 
         JLabel Name = new JLabel("Select one : This Order is ....");
@@ -49,11 +52,7 @@ public class SelectTypeOrderPage extends JPanel {
                         "Enter Your Details",
                         JOptionPane.OK_CANCEL_OPTION);
 
-            } else if (result == JOptionPane.NO_OPTION) {
-                // Check if there any table
-
-            }
-
+            } else if (result == JOptionPane.NO_OPTION) {}
         });
 
         JButton TakeawayButton = new JButton("Takeaway");

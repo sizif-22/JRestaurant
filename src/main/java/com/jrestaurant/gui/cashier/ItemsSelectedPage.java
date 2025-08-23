@@ -9,6 +9,8 @@ public class ItemsSelectedPage extends JPanel {
 
     public ItemsSelectedPage(MainFrame frame) {
 
+        setBounds(0, 0, MainFrame.getFrameWidth(), MainFrame.getFrameHeight());
+        setBackground(new Color(21, 21, 21));
         setLayout(null);
 
         JLabel Name = new JLabel("Make Order");

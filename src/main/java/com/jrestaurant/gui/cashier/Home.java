@@ -38,6 +38,7 @@ public class Home extends JPanel {
           makeOrderButton1.setForeground(Color.BLACK);
           makeOrderButton1.setBounds(MainFrame.getWidthRatio(25), MainFrame.getHeightRatio(80),
                     MainFrame.getWidthRatio(15), 40);
+          makeOrderButton1.addActionListener(e -> frame.goToMakeOrderPanel());
           add(makeOrderButton1);
 
           JPanel leftPanel = new JPanel();
@@ -51,6 +52,7 @@ public class Home extends JPanel {
           makeOrderButton.setBackground(Color.white);
           makeOrderButton.setForeground(Color.BLACK);
           makeOrderButton.setBounds(30, MainFrame.getHeightRatio(50) - 110, MainFrame.getWidthRatio(20) - 60, 45);
+          makeOrderButton.addActionListener(e -> frame.goToMakeOrderPanel());
           leftPanel.add(makeOrderButton);
 
           JButton reservationButton = new JButton("Reservation");
@@ -58,6 +60,7 @@ public class Home extends JPanel {
           reservationButton.setBackground(Color.white);
           reservationButton.setForeground(Color.BLACK);
           reservationButton.setBounds(30, MainFrame.getHeightRatio(50) - 35, MainFrame.getWidthRatio(20) - 60, 45);
+          reservationButton.addActionListener(e -> frame.goToMakeReservationPanel());
           leftPanel.add(reservationButton);
 
           JButton orderButton = new JButton("Orders");
@@ -65,22 +68,17 @@ public class Home extends JPanel {
           orderButton.setBackground(Color.white);
           orderButton.setForeground(Color.BLACK);
           orderButton.setBounds(30, MainFrame.getHeightRatio(50) + 40, MainFrame.getWidthRatio(20) - 60, 45);
+          orderButton.addActionListener(e -> frame.goToSecondManagerPanel());
           leftPanel.add(orderButton);
-
+          
           JButton logoutButton = new JButton("Log out");
           logoutButton.setFont(new Font("Arial", Font.BOLD, 18));
           logoutButton.setBackground(Color.white);
           logoutButton.setForeground(Color.BLACK);
           logoutButton.setBounds(30, MainFrame.getFrameHeight() - 55, MainFrame.getWidthRatio(20) - 60, 45);
+          logoutButton.addActionListener(e -> frame.logOut());
           leftPanel.add(logoutButton);
 
-          logoutButton.addActionListener(e -> {
-               frame.logOut();
-          });
-
-     }
-     void makeOrder(MainFrame frame){
-          
      }
 
 }
