@@ -95,7 +95,7 @@ public class Reservation {
                EntityManager em = odbManager.getEntityManager();
                em.getTransaction().begin();
                TypedQuery query = em.createQuery(
-                         "SELECT r FROM reservation r WHERE r.customerName = n and r.phone = p AND r.date BETWEEN s AND e",
+                         "SELECT r FROM reservation r WHERE r.customerName = :n and r.phone = :p AND r.date BETWEEN :s AND :e",
                          Reservation.class);
                query.setParameter("n", name);
                query.setParameter("p", phone);
@@ -181,20 +181,30 @@ public class Reservation {
                em = odbManager.getEntityManager();
                em.getTransaction().begin();
 
-               // Calculate the time window: 30 min before and after the given date
-               long millis = 30 * 60 * 1000L;
-               Timestamp start = new Timestamp(date.getTime() - millis);
-               Timestamp end = new Timestamp(date.getTime() + millis);
+               // Convert the timestamp to start and end of the day
+               java.time.LocalDate localDate = date.toLocalDateTime().toLocalDate();
+               java.time.LocalDateTime startOfDay = localDate.atStartOfDay();
+               java.time.LocalDateTime endOfDay = localDate.atTime(23, 59, 59, 999999999);
 
-               // Query for reservations that match the criteria
+               Timestamp startOfDayTimestamp = Timestamp.valueOf(startOfDay);
+               Timestamp endOfDayTimestamp = Timestamp.valueOf(endOfDay);
+
+               // Debug output
+               System.out.println("Searching for reservation on date: " + localDate);
+               System.out.println("Name: " + customerName);
+               System.out.println("Phone: " + phone);
+               System.out.println("Time range: " + startOfDayTimestamp + " to " + endOfDayTimestamp);
+
+               // Query for reservations on the specific day
                String jpql = "SELECT r FROM Reservation r WHERE r.customerName = :name AND r.phone = :phone AND r.date BETWEEN :start AND :end";
                TypedQuery<Reservation> query = em.createQuery(jpql, Reservation.class);
                query.setParameter("name", customerName);
                query.setParameter("phone", phone);
-               query.setParameter("start", start);
-               query.setParameter("end", end);
+               query.setParameter("start", startOfDayTimestamp);
+               query.setParameter("end", endOfDayTimestamp);
 
                List<Reservation> reservations = query.getResultList();
+               System.out.println("Found " + reservations.size() + " matching reservations");
 
                if (reservations.isEmpty()) {
                     em.getTransaction().commit();
@@ -204,6 +214,7 @@ public class Reservation {
 
                // Remove all matching reservations
                for (Reservation reservation : reservations) {
+                    System.out.println("Removing reservation ID: " + reservation.getId());
                     em.remove(reservation);
                }
 

@@ -138,21 +138,21 @@ public class SelectTypeOrderPage extends JPanel {
                                         askPanel.add(nameField);
                                         askPanel.add(new JLabel("Phone: "));
                                         askPanel.add(phoneField);
-                                        JOptionPane.showConfirmDialog(frame, askPanel, "", JOptionPane.OK_OPTION);
+                                        JOptionPane.showMessageDialog(frame, askPanel, "", JOptionPane.OK_OPTION);
                                         String name = nameField.getText();
                                         String phone = phoneField.getText();
                                         boolean res2 = Reservation.searchForSpecificReservation(name, phone);
                                         if (res2) {
                                                 Random random = new Random();
                                                 int rand = random.nextInt(5) + 1;
-                                                JOptionPane.showConfirmDialog(frame, "You are at table no." + rand, "",
+                                                JOptionPane.showMessageDialog(frame, "You are at table no." + rand, "",
                                                                 JOptionPane.OK_OPTION);
                                                 frame.getOrder().setOrderTime(Timestamp.valueOf(LocalDateTime.now()));
                                                 Order.makeOrder(frame.getOrder());
                                                 frame.setOrderType("");
                                                 frame.cancelOrder();
                                         } else {
-                                                JOptionPane.showConfirmDialog(frame, "This reservation is Invalid.", "",
+                                                JOptionPane.showMessageDialog(frame, "This reservation is Invalid.", "",
                                                                 JOptionPane.OK_OPTION);
                                                 return;
                                         }
@@ -162,14 +162,14 @@ public class SelectTypeOrderPage extends JPanel {
                                         if (res2) {
                                                 Random random = new Random();
                                                 int rand = random.nextInt(5) + 1;
-                                                JOptionPane.showConfirmDialog(frame, "You are at table no." + rand, "",
+                                                JOptionPane.showMessageDialog(frame, "You are at table no." + rand, "",
                                                                 JOptionPane.OK_OPTION);
                                                 frame.getOrder().setOrderTime(Timestamp.valueOf(LocalDateTime.now()));
                                                 Order.makeOrder(frame.getOrder());
                                                 frame.setOrderType("");
                                                 frame.cancelOrder();
                                         } else {
-                                                JOptionPane.showConfirmDialog(frame,
+                                                JOptionPane.showMessageDialog(frame,
                                                                 "There is no available tables right now.", "",
                                                                 JOptionPane.OK_OPTION);
                                                 return;

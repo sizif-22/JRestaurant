@@ -44,7 +44,6 @@ public class MakeReservationPage extends JPanel {
                 Form.add(nameLabel);
                 Form.add(nameField);
 
-                // PhoneNumber Row
                 JLabel phoneNumberLabel = new JLabel("Phone Number:");
                 phoneNumberLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 JTextField PhoneField = new JTextField();
@@ -56,10 +55,9 @@ public class MakeReservationPage extends JPanel {
                 Form.add(phoneNumberLabel);
                 Form.add(PhoneField);
 
-                // Date Row
                 JLabel DateLabel = new JLabel("Date & Time (YYYY-MM-DD HH:MM):");
                 DateLabel.setForeground(Color.WHITE);
-                DateLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                DateLabel.setFont(new Font("Arial", Font.BOLD, 18));
                 JFormattedTextField DateField = new JFormattedTextField(
                                 new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm"));
                 DateField.setToolTipText("Enter date and time as YYYY-MM-DD HH:MM");
@@ -81,26 +79,31 @@ public class MakeReservationPage extends JPanel {
                         // Create dialog for cancellation details
                         JDialog cancelDialog = new JDialog(frame, "Cancel Reservation", true);
                         cancelDialog.setLayout(new BorderLayout());
-                        cancelDialog.setSize(350, 200);
+                        cancelDialog.setSize(450, 250); // Increased dialog size
                         cancelDialog.setLocationRelativeTo(frame);
 
                         // Create input panel
-                        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-                        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 15, 15)); // Increased spacing
+                        inputPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25)); // Increased padding
 
-                        JTextField cancelNameField = new JTextField(15);
-                        JTextField cancelPhoneField = new JTextField(15);
-                        JTextField cancelDateField = new JTextField(15);
+                        JTextField nameField2 = new JTextField(25); // Increased width
+                        nameField2.setPreferredSize(new Dimension(250, 35)); // Set custom size
+
+                        JTextField phoneField = new JTextField(25); // Increased width
+                        phoneField.setPreferredSize(new Dimension(250, 35)); // Set custom size
+
+                        JTextField dateField = new JTextField(25); // Increased width
+                        dateField.setPreferredSize(new Dimension(250, 35)); // Set custom size
 
                         inputPanel.add(new JLabel("Name:"));
-                        inputPanel.add(cancelNameField);
+                        inputPanel.add(nameField2);
                         inputPanel.add(new JLabel("Phone Number:"));
-                        inputPanel.add(cancelPhoneField);
+                        inputPanel.add(phoneField);
                         inputPanel.add(new JLabel("Date (YYYY-MM-DD):"));
-                        inputPanel.add(cancelDateField);
+                        inputPanel.add(dateField);
 
                         // Add placeholder text for date format
-                        cancelDateField.setText("2024-01-01");
+                        dateField.setText("2024-01-01");
 
                         // Create button panel
                         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -112,9 +115,9 @@ public class MakeReservationPage extends JPanel {
 
                         // Confirm button processes the cancellation
                         confirmButton.addActionListener(ev -> {
-                                String name = cancelNameField.getText().trim();
-                                String phone = cancelPhoneField.getText().trim();
-                                String dateStr = cancelDateField.getText().trim();
+                                String name = nameField2.getText().trim();
+                                String phone = phoneField.getText().trim();
+                                String dateStr = dateField.getText().trim();
 
                                 if (name.isEmpty() || phone.isEmpty() || dateStr.isEmpty()) {
                                         JOptionPane.showMessageDialog(cancelDialog,
@@ -146,14 +149,18 @@ public class MakeReservationPage extends JPanel {
                                         }
 
                                 } catch (java.time.format.DateTimeParseException ex) {
-                                        JOptionPane.showMessageDialog(cancelDialog,
+                                        JOptionPane.showMessageDialog(frame,
                                                         "Please enter a valid date in YYYY-MM-DD format.",
                                                         "Invalid Date Format",
                                                         JOptionPane.ERROR_MESSAGE);
                                 } catch (Exception ex) {
-                                        JOptionPane.showMessageDialog(cancelDialog,
+                                        JOptionPane.showMessageDialog(frame,
                                                         "Error cancelling reservation: " + ex.getMessage(),
                                                         "Error",
+                                                        JOptionPane.ERROR_MESSAGE);
+                                        JOptionPane.showMessageDialog(cancelDialog,
+                                                        "Please enter a valid date in YYYY-MM-DD format.",
+                                                        "Invalid Date Format",
                                                         JOptionPane.ERROR_MESSAGE);
                                 }
                         });
@@ -260,7 +267,7 @@ public class MakeReservationPage extends JPanel {
                                                                 JOptionPane.ERROR_MESSAGE);
                                                 return;
                                         }
-                                        // If valid, you can proceed to create the reservation here
+                                        frame.goToMakeReservationPanel();
                                 } catch (Exception ex) {
                                         System.out.println(ex.getMessage());
                                         JOptionPane.showMessageDialog(
