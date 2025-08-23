@@ -27,6 +27,8 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.connection.pool_size" value="10"/>
+            <property name="hibernate.connection.timeout" value="30000"/>
             
             <!-- Schema generation -->
             <property name="hibernate.hbm2ddl.auto" value="update"/>

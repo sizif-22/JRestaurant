@@ -194,13 +194,13 @@ public class MainManagerPanel extends JPanel {
                                         continue;
                                    }
                                    if (role.equals(Role.CASHIER.toString())) {
-                                        if (username.length() > 3) {
+                                        if (username.length() > 3 || !Pattern.matches("^\\S$", username)) {
                                              JOptionPane.showMessageDialog(frame,
-                                                       "username must be 3 characters at least.");
+                                                       "username must be 3 characters at least and it can't contain any spaces.");
                                              System.out.println("username invalid.");
                                              continue;
                                         }
-                                        if (password.length() < 6) {
+                                        if (password.length() < 6 || !Pattern.matches("^\\S$", password)) {
                                              JOptionPane.showMessageDialog(frame, "This password is too weak");
                                              System.out.println("Password is Too weak.");
                                              continue;

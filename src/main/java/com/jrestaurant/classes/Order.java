@@ -7,7 +7,9 @@ import com.jrestaurant.config.DatabaseConfig;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Order")
+@Table(name = "orders")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "DTYPE", discriminatorType = DiscriminatorType.STRING)
 public class Order {
      @Id
      @GeneratedValue
@@ -19,10 +21,10 @@ public class Order {
      @Column(name = "total")
      private double total;
 
-     @OneToMany(mappedBy = "order")
+     @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
      private Set<OrderHasFoodItems> orderItems;
 
-     private static DatabaseConfig odbManager;
+     protected static DatabaseConfig odbManager;
 
      public static void setODBManager(DatabaseConfig manager) {
           odbManager = manager;
@@ -60,23 +62,77 @@ public class Order {
      }
 
      public void addItemToTheList(FoodItem foodItem) {
-          orderItems.add(new OrderHasFoodItems(this, foodItem));
+          OrderHasFoodItems orderItem = new OrderHasFoodItems(this, foodItem);
+          orderItems.add(orderItem);
      }
 
      public void removeFromList(FoodItem foodItem) {
-          orderItems.remove(new OrderHasFoodItems(this, foodItem));
+          for (Iterator<OrderHasFoodItems> iterator = orderItems.iterator(); iterator.hasNext();) {
+               OrderHasFoodItems orderItem = iterator.next();
+               if (orderItem.getOrder().equals(this) && orderItem.getFoodItem().equals(foodItem)) {
+                    iterator.remove();
+                    orderItem.setOrder(null);
+                    orderItem.setFoodItem(null);
+               }
+          }
+     }
+
+     public boolean contains(FoodItem foodItem) {
+          for (OrderHasFoodItems orderItem : orderItems) {
+               if (orderItem.getFoodItem().getId() == foodItem.getId()) {
+                    return true;
+               }
+          }
+          return false;
+     }
+
+     public void cancelOrder() {
+          orderItems.clear();
      }
 
      public static boolean makeOrder(Order order) {
+          EntityManager em = null;
           try {
-               EntityManager em = odbManager.getEntityManager();
+               em = odbManager.getEntityManager();
                em.getTransaction().begin();
-               em.merge(order);
+
+               // First persist the order to get an ID
+               em.persist(order);
+
+               // Then persist each OrderHasFoodItems
+               for (OrderHasFoodItems orderItem : order.getOrderItems()) {
+                    // Find the FoodItem by ID instead of merging to get a managed entity
+                    int foodItemId = orderItem.getFoodItem().getId();
+                    FoodItem managedFoodItem = em.find(FoodItem.class, foodItemId);
+
+                    if (managedFoodItem == null) {
+                         throw new RuntimeException("FoodItem with ID " + foodItemId + " not found in database");
+                    }
+
+                    // Create a new OrderHasFoodItems with managed entities and proper composite key
+                    OrderHasFoodItems newOrderItem = new OrderHasFoodItems(order, managedFoodItem,
+                              orderItem.getCount());
+
+                    // Set the composite key values after the order has been persisted
+                    newOrderItem.getId().setOrderId(order.getId());
+                    newOrderItem.getId().setFoodItemId(managedFoodItem.getId());
+
+                    em.persist(newOrderItem);
+               }
+
                em.getTransaction().commit();
                return true;
           } catch (Exception ex) {
-               System.out.println(ex.getMessage());
+               if (em != null && em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+               }
+               System.out.println("Error making order: " + ex.getMessage());
+               ex.printStackTrace();
                return false;
+          } finally {
+               if (em != null && em.isOpen()) {
+                    em.close();
+               }
           }
      }
 

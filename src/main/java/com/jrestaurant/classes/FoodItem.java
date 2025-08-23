@@ -19,7 +19,7 @@ public class FoodItem {
 
      @Column(name = "name")
      private String name;
-     
+
      @Column(name = "price")
      private double price;
 
@@ -68,11 +68,25 @@ public class FoodItem {
 
      @SuppressWarnings({ "unchecked", "rawtypes" })
      public static List<FoodItem> getAllItems() {
-          EntityManager em = odbManager.getEntityManager();
-          em.getTransaction().begin();
-          TypedQuery query = em.createQuery("SELECT f from FoodItem f", FoodItem.class);
-          List<FoodItem> foodItems = query.getResultList();
-          em.close();
-          return foodItems;
+          EntityManager em = null;
+          try {
+               em = odbManager.getEntityManager();
+               em.getTransaction().begin();
+               TypedQuery query = em.createQuery("SELECT f from FoodItem f", FoodItem.class);
+               List<FoodItem> foodItems = query.getResultList();
+               em.getTransaction().commit();
+               return foodItems;
+          } catch (Exception e) {
+               if (em != null && em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+               }
+               System.err.println("Error getting food items: " + e.getMessage());
+               e.printStackTrace();
+               return new ArrayList<>();
+          } finally {
+               if (em != null && em.isOpen()) {
+                    em.close();
+               }
+          }
      }
 }

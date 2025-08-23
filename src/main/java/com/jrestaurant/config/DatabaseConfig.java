@@ -62,20 +62,30 @@ public class DatabaseConfig {
      * @return The current EntityManager instance
      */
     public EntityManager getEntityManager() {
-        // If entity manager is closed, create a new one
-        if (entityManager == null || !entityManager.isOpen()) {
-            entityManager = createEntityManager();
-        }
-        return entityManager;
+        // Always create a new EntityManager for each request to avoid connection issues
+        return createEntityManager();
     }
 
     public void closeResources() {
         if (entityManager != null && entityManager.isOpen()) {
             entityManager.close();
+            entityManager = null;
         }
 
         if (emf != null && emf.isOpen()) {
             emf.close();
+            emf = null;
+        }
+    }
+
+    /**
+     * Closes a specific EntityManager instance
+     * 
+     * @param em The EntityManager to close
+     */
+    public void closeEntityManager(EntityManager em) {
+        if (em != null && em.isOpen()) {
+            em.close();
         }
     }
 }

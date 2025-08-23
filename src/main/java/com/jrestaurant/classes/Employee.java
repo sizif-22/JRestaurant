@@ -158,4 +158,69 @@ public class Employee {
                return false;
           }
      }
+
+     public static Employee getRandomDeliveryEmployee() {
+          EntityManager em = null;
+          try {
+               em = odbManager.getEntityManager();
+               em.getTransaction().begin();
+
+               // Query for employees with DELIVERY role
+               TypedQuery<Employee> query = em.createQuery(
+                         "SELECT e FROM Employee e WHERE e.role = :role",
+                         Employee.class);
+               query.setParameter("role", Role.DELIVERY);
+
+               List<Employee> deliveryEmployees = query.getResultList();
+               em.getTransaction().commit();
+
+               if (deliveryEmployees.isEmpty()) {
+                    return null; // No delivery employees found
+               }
+
+               // Return a random delivery employee
+               Random random = new Random();
+               int randomIndex = random.nextInt(deliveryEmployees.size());
+               return deliveryEmployees.get(randomIndex);
+
+          } catch (Exception e) {
+               if (em != null && em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+               }
+               System.err.println("Error getting random delivery employee: " + e.getMessage());
+               e.printStackTrace();
+               return null;
+          } finally {
+               if (em != null && em.isOpen()) {
+                    em.close();
+               }
+          }
+
+     }
+
+     public static Employee getEmployeeById(int employeeId) {
+          EntityManager em = null;
+          try {
+               em = odbManager.getEntityManager();
+               em.getTransaction().begin();
+
+               // Find employee by ID
+               Employee employee = em.find(Employee.class, employeeId);
+
+               em.getTransaction().commit();
+               return employee;
+
+          } catch (Exception e) {
+               if (em != null && em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+               }
+               System.err.println("Error getting employee by ID: " + e.getMessage());
+               e.printStackTrace();
+               return null;
+          } finally {
+               if (em != null && em.isOpen()) {
+                    em.close();
+               }
+          }
+     }
 }

@@ -20,6 +20,7 @@ public class MainFrame extends JFrame {
      private static int height = (int) (1080 * 0.7);
      private Employee emp;
      private Order order;
+     private String orderType;
 
      public MainFrame() {
           ImageIcon img = new ImageIcon(MainFrame.class.getResource("../assets/Jresaurant-2.jpg"));
@@ -31,6 +32,7 @@ public class MainFrame extends JFrame {
           Order.setODBManager(dbconfig);
           FoodItem.setODBManager(dbconfig);
           OrderHasFoodItems.setODBManager(dbconfig);
+          // Delivery.setODBManager(dbconfig);
 
           setTitle("JRestaurant");
           getContentPane().setBackground(new Color(21, 21, 21));
@@ -45,6 +47,7 @@ public class MainFrame extends JFrame {
           setPanel(new LoginPanel(this));
           this.emp = null;
           this.order = new Order();
+          this.orderType = "";
      }
 
      public void setPanel(JPanel panel) {
@@ -57,12 +60,25 @@ public class MainFrame extends JFrame {
           this.emp = emp;
      }
 
+     public void setOrderType(String orderType) {
+          this.orderType = orderType;
+     }
+
+     public String getOrderType() {
+          return orderType;
+     }
+
      public Employee getEmp() {
           return this.emp;
      }
 
      public Order getOrder() {
           return this.order;
+     }
+
+     public void cancelOrder() {
+          this.order.cancelOrder();
+          goToCashierPanel();
      }
 
      public static int getFrameWidth() {
@@ -99,6 +115,14 @@ public class MainFrame extends JFrame {
 
      public void goToMakeReservationPanel() {
           setPanel(new MakeReservationPage(this));
+     }
+
+     public void goToSelectTypeOrderPage() {
+          setPanel(new SelectTypeOrderPage(this));
+     }
+
+     public void goToItemsSelectedPage() {
+          setPanel(new ItemsSelectedPage(this));
      }
 
      public void logOut() {

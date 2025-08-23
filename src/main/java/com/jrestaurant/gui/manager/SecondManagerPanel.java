@@ -2,7 +2,8 @@ package com.jrestaurant.gui.manager;
 
 import javax.swing.*;
 
-import com.jrestaurant.classes.Role;
+
+import com.jrestaurant.classes.*;
 import com.jrestaurant.gui.MainFrame;
 
 import java.awt.*;
@@ -15,10 +16,10 @@ public class SecondManagerPanel extends JPanel {
           setBackground(new Color(21, 21, 21));
           setBounds(0, 0, MainFrame.getFrameWidth(), MainFrame.getFrameHeight());
 
-          JLabel label = new JLabel("Manager Page 2.");
+          JLabel label = new JLabel("Delivery Orders.");
           label.setFont(new Font("Arial", Font.BOLD, 24));
           label.setForeground(Color.WHITE);
-          label.setBounds(MainFrame.getWidthRatio(25), MainFrame.getHeightRatio(10), 200, 50);
+          label.setBounds(MainFrame.getWidthRatio(25), MainFrame.getHeightRatio(7), 200, 50);
           add(label);
 
           JPanel leftPanel = new JPanel();
@@ -26,6 +27,58 @@ public class SecondManagerPanel extends JPanel {
           leftPanel.setBackground(new Color(25, 25, 25));
           leftPanel.setLayout(null);
           add(leftPanel);
+
+          JPanel table = new JPanel();
+          table.setLayout(null);
+          table.setBounds(MainFrame.getWidthRatio(25), MainFrame.getHeightRatio(15), MainFrame.getWidthRatio(70),
+                    MainFrame.getHeightRatio(60));
+          table.setBorder(BorderFactory.createLineBorder(Color.white));
+          table.setBackground(new Color(25, 25, 25));
+          add(table);
+
+          JLabel nameHeader = new JLabel("ClientName");
+          nameHeader.setFont(new Font("Arial", Font.BOLD, 22));
+          nameHeader.setForeground(Color.WHITE);
+          nameHeader.setBounds(10, 0, (int) MainFrame.getWidthRatio(70) / 5, 40);
+          table.add(nameHeader);
+
+          JLabel phoneNumberHeader = new JLabel("PhoneNumber");
+          phoneNumberHeader.setFont(new Font("Arial", Font.BOLD, 22));
+          phoneNumberHeader.setForeground(Color.WHITE);
+          phoneNumberHeader.setBounds((int) (MainFrame.getWidthRatio(70) * 1 / 5) + 10, 0,
+                    (int) MainFrame.getWidthRatio(70) / 5,
+                    40);
+          table.add(phoneNumberHeader);
+
+          JLabel jobTitleHeader = new JLabel("Address");
+          jobTitleHeader.setFont(new Font("Arial", Font.BOLD, 22));
+          jobTitleHeader.setForeground(Color.WHITE);
+          jobTitleHeader.setBounds((int) (MainFrame.getWidthRatio(70) * 2 / 5) + 10, 0,
+                    (int) MainFrame.getWidthRatio(70) / 5, 40);
+          table.add(jobTitleHeader);
+
+          JLabel salaryHeader = new JLabel("Total");
+          salaryHeader.setFont(new Font("Arial", Font.BOLD, 22));
+          salaryHeader.setForeground(Color.WHITE);
+          salaryHeader.setBounds((int) (MainFrame.getWidthRatio(70) * 3 / 5) + 10, 0,
+                    (int) MainFrame.getWidthRatio(70) / 5, 40);
+          table.add(salaryHeader);
+
+          JLabel actionHeader = new JLabel("Actions");
+          actionHeader.setFont(new Font("Arial", Font.BOLD, 22));
+          actionHeader.setForeground(Color.WHITE);
+          actionHeader.setBounds((int) (MainFrame.getWidthRatio(70) * 4 / 5) + 10, 0,
+                    (int) MainFrame.getWidthRatio(70) / 5, 40);
+          table.add(actionHeader);
+
+          java.util.List<Delivery> DeliveryOrders = Delivery.getAllOrders();
+          int index = 0;
+          for (Delivery delivery : DeliveryOrders) {
+               DeliveryOrderRows dor = new DeliveryOrderRows(delivery, ++index, frame);
+               table.add(dor);
+          }
+
+
 
           if (frame.getEmp().getRole() == Role.MANAGER) {
                JButton empButton = new JButton("Employees");

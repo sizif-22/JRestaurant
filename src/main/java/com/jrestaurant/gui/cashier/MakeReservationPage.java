@@ -20,20 +20,22 @@ public class MakeReservationPage extends JPanel {
 
                 JLabel Name = new JLabel("Make Reservation");
                 Name.setForeground(Color.WHITE);
-                Name.setFont(new Font("Arial", Font.BOLD, 30));
-                Name.setBounds((int) (getWidth() * 0.21), (int) (getHeight() * 0.05), (int) (getWidth() * 0.3),
+                Name.setFont(new Font("Georgia", Font.BOLD, 36));
+                Name.setBounds((int) (getWidth() * 0.25), (int) (getHeight() * 0.05), (int) (getWidth() * 0.3),
                                 (int) (getHeight() * 0.2));
                 add(Name);
 
                 JPanel Form = new JPanel();
-                Form.setBounds((int) (getWidth() * 0.22), (int) (getHeight() * 0.2), (int) (getWidth() * 0.75),
+                Form.setBounds(MainFrame.getWidthRatio(25), (int) (getHeight() * 0.3), MainFrame.getWidthRatio(70),
                                 (int) (getHeight() * 0.3));
                 Form.setLayout(null);
-                Form.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
+                // Form.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 5));
+                Form.setBackground(new Color(25, 25, 25));
 
                 // name Row
                 JLabel nameLabel = new JLabel("Name:");
                 nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
+                nameLabel.setForeground(Color.WHITE);
                 JTextField nameField = new JTextField();
                 nameLabel.setBounds((int) (Form.getWidth() * 0.03), (int) (Form.getHeight() * 0.15),
                                 (int) (Form.getWidth() * 0.2), (int) (Form.getHeight() * 0.12));
@@ -48,6 +50,7 @@ public class MakeReservationPage extends JPanel {
                 JTextField PhoneField = new JTextField();
                 phoneNumberLabel.setBounds((int) (Form.getWidth() * 0.03), (int) (Form.getHeight() * 0.38),
                                 (int) (Form.getWidth() * 0.2), (int) (Form.getHeight() * 0.12));
+                phoneNumberLabel.setForeground(Color.WHITE);
                 PhoneField.setBounds((int) (Form.getWidth() * 0.25), (int) (Form.getHeight() * 0.38),
                                 (int) (Form.getWidth() * 0.7) - 20, (int) (Form.getHeight() * 0.12));
                 Form.add(phoneNumberLabel);
@@ -55,6 +58,7 @@ public class MakeReservationPage extends JPanel {
 
                 // Date Row
                 JLabel DateLabel = new JLabel("Date & Time (YYYY-MM-DD HH:MM):");
+                DateLabel.setForeground(Color.WHITE);
                 DateLabel.setFont(new Font("Arial", Font.BOLD, 20));
                 JFormattedTextField DateField = new JFormattedTextField(
                                 new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm"));
@@ -67,13 +71,109 @@ public class MakeReservationPage extends JPanel {
                 Form.add(DateField);
                 add(Form);
 
+                JButton cancelAReservationButton = new JButton("Cancel A Reservation");
+                cancelAReservationButton.setFont(new Font("Arial", Font.BOLD, 18));
+                cancelAReservationButton.setBackground(Color.GRAY);
+                cancelAReservationButton.setForeground(Color.white);
+                cancelAReservationButton.setBounds(MainFrame.getWidthRatio(25), (int) (getHeight() * 0.85),
+                                (int) (getWidth() * 0.20), 40);
+                cancelAReservationButton.addActionListener(e -> {
+                        // Create dialog for cancellation details
+                        JDialog cancelDialog = new JDialog(frame, "Cancel Reservation", true);
+                        cancelDialog.setLayout(new BorderLayout());
+                        cancelDialog.setSize(350, 200);
+                        cancelDialog.setLocationRelativeTo(frame);
+
+                        // Create input panel
+                        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+                        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+                        JTextField cancelNameField = new JTextField(15);
+                        JTextField cancelPhoneField = new JTextField(15);
+                        JTextField cancelDateField = new JTextField(15);
+
+                        inputPanel.add(new JLabel("Name:"));
+                        inputPanel.add(cancelNameField);
+                        inputPanel.add(new JLabel("Phone Number:"));
+                        inputPanel.add(cancelPhoneField);
+                        inputPanel.add(new JLabel("Date (YYYY-MM-DD):"));
+                        inputPanel.add(cancelDateField);
+
+                        // Add placeholder text for date format
+                        cancelDateField.setText("2024-01-01");
+
+                        // Create button panel
+                        JPanel buttonPanel = new JPanel(new FlowLayout());
+                        JButton cancelButton = new JButton("Cancel");
+                        JButton confirmButton = new JButton("Confirm Cancellation");
+
+                        // Cancel button closes dialog
+                        cancelButton.addActionListener(ev -> cancelDialog.dispose());
+
+                        // Confirm button processes the cancellation
+                        confirmButton.addActionListener(ev -> {
+                                String name = cancelNameField.getText().trim();
+                                String phone = cancelPhoneField.getText().trim();
+                                String dateStr = cancelDateField.getText().trim();
+
+                                if (name.isEmpty() || phone.isEmpty() || dateStr.isEmpty()) {
+                                        JOptionPane.showMessageDialog(cancelDialog,
+                                                        "Please fill in all fields.",
+                                                        "Missing Information",
+                                                        JOptionPane.WARNING_MESSAGE);
+                                        return;
+                                }
+
+                                try {
+                                        // Parse the date
+                                        java.time.LocalDate date = java.time.LocalDate.parse(dateStr);
+                                        java.sql.Timestamp dateTime = java.sql.Timestamp.valueOf(date.atStartOfDay());
+
+                                        // Attempt to cancel the reservation
+                                        boolean cancelled = Reservation.cancelReservation(name, phone, dateTime);
+
+                                        if (cancelled) {
+                                                JOptionPane.showMessageDialog(cancelDialog,
+                                                                "Reservation cancelled successfully!",
+                                                                "Success",
+                                                                JOptionPane.INFORMATION_MESSAGE);
+                                                cancelDialog.dispose();
+                                        } else {
+                                                JOptionPane.showMessageDialog(cancelDialog,
+                                                                "No reservation found for the specified details.",
+                                                                "Not Found",
+                                                                JOptionPane.INFORMATION_MESSAGE);
+                                        }
+
+                                } catch (java.time.format.DateTimeParseException ex) {
+                                        JOptionPane.showMessageDialog(cancelDialog,
+                                                        "Please enter a valid date in YYYY-MM-DD format.",
+                                                        "Invalid Date Format",
+                                                        JOptionPane.ERROR_MESSAGE);
+                                } catch (Exception ex) {
+                                        JOptionPane.showMessageDialog(cancelDialog,
+                                                        "Error cancelling reservation: " + ex.getMessage(),
+                                                        "Error",
+                                                        JOptionPane.ERROR_MESSAGE);
+                                }
+                        });
+
+                        buttonPanel.add(cancelButton);
+                        buttonPanel.add(confirmButton);
+
+                        // Add components to dialog
+                        cancelDialog.add(inputPanel, BorderLayout.CENTER);
+                        cancelDialog.add(buttonPanel, BorderLayout.SOUTH);
+
+                        cancelDialog.setVisible(true);
+                });
+                add(cancelAReservationButton);
+
                 JButton cancelButton = new JButton("Cancel");
                 cancelButton.setFont(new Font("Arial", Font.BOLD, 18));
                 cancelButton.setBackground(Color.GRAY);
                 cancelButton.setForeground(Color.white);
-                cancelButton.setBounds((int) (getWidth() * 0.6), (int) (getHeight() * 0.52),
-                                (int) (getWidth() * 0.20) - 45,
-                                40);
+                cancelButton.setBounds(MainFrame.getWidthRatio(95) - 420, (int) (getHeight() * 0.85), 200, 40);
                 cancelButton.addActionListener(e -> frame.goToCashierPanel());
                 add(cancelButton);
 
@@ -81,9 +181,7 @@ public class MakeReservationPage extends JPanel {
                 createButton.setFont(new Font("Arial", Font.BOLD, 18));
                 createButton.setBackground(Color.GRAY);
                 createButton.setForeground(Color.white);
-                createButton.setBounds((int) (getWidth() * 0.78), (int) (getHeight() * 0.52),
-                                (int) (getWidth() * 0.20) - 45,
-                                40);
+                createButton.setBounds(MainFrame.getWidthRatio(95) - 200, (int) (getHeight() * 0.85), 200, 40);
                 add(createButton);
 
                 JPanel leftPanel = new JPanel();
