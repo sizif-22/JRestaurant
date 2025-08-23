@@ -2,7 +2,6 @@ package com.jrestaurant.gui.manager;
 
 import javax.swing.*;
 
-
 import com.jrestaurant.classes.*;
 import com.jrestaurant.gui.MainFrame;
 
@@ -78,16 +77,24 @@ public class SecondManagerPanel extends JPanel {
                table.add(dor);
           }
 
-
-
           if (frame.getEmp().getRole() == Role.MANAGER) {
+
                JButton empButton = new JButton("Employees");
                empButton.setFont(new Font("Arial", Font.BOLD, 18));
                empButton.setBackground(Color.white);
                empButton.setForeground(Color.BLACK);
-               empButton.setBounds(30, MainFrame.getHeightRatio(50) - 55, MainFrame.getWidthRatio(20) - 60, 45);
+               empButton.setBounds(30, MainFrame.getHeightRatio(50) - 110, MainFrame.getWidthRatio(20) - 60, 45);
                empButton.addActionListener(e -> frame.goToManagerMainPanel());
                leftPanel.add(empButton);
+
+               JButton foodItems = new JButton("Food items");
+               foodItems.setFont(new Font("Arial", Font.BOLD, 18));
+               foodItems.setBackground(Color.white);
+               foodItems.setForeground(Color.BLACK);
+               foodItems.setBounds(30, MainFrame.getHeightRatio(50) - 35, MainFrame.getWidthRatio(20) - 60, 45);
+               foodItems.addActionListener(e -> frame.goToFoodItemsManagerPanel());
+               leftPanel.add(foodItems);
+
           } else if (frame.getEmp().getRole() == Role.CASHIER) {
                JButton makeOrderButton = new JButton("Make Order");
                makeOrderButton.setFont(new Font("Arial", Font.BOLD, 18));

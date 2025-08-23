@@ -35,8 +35,16 @@ public class MainManagerPanel extends JPanel {
           empButton.setFont(new Font("Arial", Font.BOLD, 18));
           empButton.setBackground(Color.DARK_GRAY);
           empButton.setForeground(Color.BLACK);
-          empButton.setBounds(30, MainFrame.getHeightRatio(50) - 55, MainFrame.getWidthRatio(20) - 60, 45);
+          empButton.setBounds(30, MainFrame.getHeightRatio(50) - 110, MainFrame.getWidthRatio(20) - 60, 45);
           leftPanel.add(empButton);
+
+          JButton foodItems = new JButton("Food items");
+          foodItems.setFont(new Font("Arial", Font.BOLD, 18));
+          foodItems.setBackground(Color.white);
+          foodItems.setForeground(Color.BLACK);
+          foodItems.setBounds(30, MainFrame.getHeightRatio(50) - 35, MainFrame.getWidthRatio(20) - 60, 45);
+          foodItems.addActionListener(e -> frame.goToFoodItemsManagerPanel());
+          leftPanel.add(foodItems);
 
           JButton orderButton = new JButton("Orders");
           orderButton.setFont(new Font("Arial", Font.BOLD, 18));

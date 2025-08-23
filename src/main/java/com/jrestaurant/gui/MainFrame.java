@@ -13,6 +13,7 @@ import com.jrestaurant.gui.cashier.*;
 import com.jrestaurant.gui.login.LoginPanel;
 import com.jrestaurant.gui.manager.MainManagerPanel;
 import com.jrestaurant.gui.manager.SecondManagerPanel;
+import com.jrestaurant.gui.manager.FoodItemsManagerPanel;
 
 public class MainFrame extends JFrame {
      private JPanel currentPanel;
@@ -123,6 +124,10 @@ public class MainFrame extends JFrame {
 
      public void goToItemsSelectedPage() {
           setPanel(new ItemsSelectedPage(this));
+     }
+
+     public void goToFoodItemsManagerPanel() {
+          setPanel(new FoodItemsManagerPanel(this));
      }
 
      public void logOut() {

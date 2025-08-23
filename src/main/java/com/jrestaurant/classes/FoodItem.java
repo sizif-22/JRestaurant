@@ -6,15 +6,11 @@ import com.jrestaurant.config.DatabaseConfig;
 
 import jakarta.persistence.*;
 
-enum Category {
-     FOOD, DRINK
-};
-
 @Entity
 @Table(name = "food_item")
 public class FoodItem {
      @Id
-     @GeneratedValue
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
      private int id;
 
      @Column(name = "name")
@@ -34,6 +30,17 @@ public class FoodItem {
 
      public static void setODBManager(DatabaseConfig manager) {
           odbManager = manager;
+     }
+
+     FoodItem() {
+          this.orderItems = new HashSet<>();
+     }
+
+     public FoodItem(String name, double price, Category category) {
+          this();
+          this.name = name;
+          this.price = price;
+          this.category = category;
      }
 
      // Getters
@@ -66,7 +73,6 @@ public class FoodItem {
           this.price = price;
      }
 
-     @SuppressWarnings({ "unchecked", "rawtypes" })
      public static List<FoodItem> getAllItems() {
           EntityManager em = null;
           try {
@@ -83,6 +89,59 @@ public class FoodItem {
                System.err.println("Error getting food items: " + e.getMessage());
                e.printStackTrace();
                return new ArrayList<>();
+          } finally {
+               if (em != null && em.isOpen()) {
+                    em.close();
+               }
+          }
+     }
+
+     public static boolean addFoodItem(FoodItem foodItem) {
+          EntityManager em = null;
+          try {
+               em = odbManager.getEntityManager();
+               em.getTransaction().begin();
+
+               // Create a completely new FoodItem object to avoid any ID conflicts
+               FoodItem newFoodItem = new FoodItem();
+               newFoodItem.setName(foodItem.getName());
+               newFoodItem.setCategory(foodItem.getCategory());
+               newFoodItem.setPrice(foodItem.getPrice());
+
+               // Let Hibernate generate the ID automatically
+               em.persist(newFoodItem);
+               em.getTransaction().commit();
+               return true;
+          } catch (Exception e) {
+               if (em != null && em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+               }
+               System.err.println("Error adding food item: " + e.getMessage());
+               e.printStackTrace();
+               return false;
+          } finally {
+               if (em != null && em.isOpen()) {
+                    em.close();
+               }
+          }
+     }
+
+     public static boolean removeFoodItem(FoodItem foodItem) {
+          EntityManager em = null;
+          try {
+               em = odbManager.getEntityManager();
+               em.getTransaction().begin();
+               FoodItem managedFoodItem = em.merge(foodItem);
+               em.remove(managedFoodItem);
+               em.getTransaction().commit();
+               return true;
+          } catch (Exception e) {
+               if (em != null && em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+               }
+               System.err.println("Error removing food item: " + e.getMessage());
+               e.printStackTrace();
+               return false;
           } finally {
                if (em != null && em.isOpen()) {
                     em.close();
